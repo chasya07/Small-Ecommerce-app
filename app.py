@@ -1,25 +1,10 @@
 from flask import Flask, redirect, session
 import sqlite3
-import base64
 
 app = Flask(__name__)
 app.secret_key = "supersecretkey"
 
 DB_NAME = "store.db"
-
-
-# Generate simple SVG product image
-def generate_image(text):
-    svg = f"""
-    <svg xmlns="http://www.w3.org/2000/svg" width="500" height="400">
-        <rect width="100%" height="100%" fill="#2563eb"/>
-        <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle"
-              font-size="40" fill="white" font-family="Arial">
-            {text}
-        </text>
-    </svg>
-    """
-    return "data:image/svg+xml;base64," + base64.b64encode(svg.encode()).decode()
 
 
 # ---------------- DATABASE ----------------
@@ -39,16 +24,14 @@ def init_db():
 
     if count == 0:
         products = [
-            ("T-Shirt", 20, generate_image("T-Shirt")),
-            ("Running Shoes", 75, generate_image("Shoes")),
-            ("Luxury Watch", 199, generate_image("Watch")),
-            ("Leather Wallet", 45, generate_image("Wallet")),
-            ("Wireless Headphones", 120, generate_image("Headphones")),
-            ("Smartphone", 699, generate_image("Phone")),
-            ("Backpack", 60, generate_image("Backpack")),
-            ("Sunglasses", 35, generate_image("Sunglasses")),
-            ("Gaming Mouse", 55, generate_image("Mouse")),
-            ("Bluetooth Speaker", 85, generate_image("Speaker"))
+            ("T-Shirt", 20, "https://images.unsplash.com/photo-1618354691373-d851c5c3a990"),
+            ("Running Shoes", 75, "https://images.unsplash.com/photo-1542291026-7eec264c27ff"),
+            ("Luxury Watch", 199, "https://images.unsplash.com/photo-1523275335684-37898b6baf30"),
+            ("Leather Wallet", 45, "https://images.unsplash.com/photo-1585386959984-a41552231658"),
+            ("Wireless Headphones", 120, "https://images.unsplash.com/photo-1518443895914-6b68b4a7f9e1"),
+            ("Smartphone", 699, "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9"),
+            ("Backpack", 60, "https://images.unsplash.com/photo-1509762774605-f07235a08f1f"),
+            ("Sunglasses", 35, "https://images.unsplash.com/photo-1511499767150-a48a237f0083")
         ]
 
         conn.executemany(
@@ -78,39 +61,114 @@ def get_product(product_id):
     return product
 
 
+# Initialize DB (important for Gunicorn)
 init_db()
 
 
-# ---------------- TEMPLATE ----------------
+# ---------------- TEMPLATE WRAPPER ----------------
 def render_page(content):
     return f"""
     <!DOCTYPE html>
     <html>
     <head>
-        <title>Modern eCommerce</title>
+        <title>Mini eCommerce</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <style>
-            body {{ margin:0; font-family:Arial; background:#f4f6f9; }}
-            header {{ background:#111827; color:white; padding:20px; text-align:center; }}
-            nav {{ background:#1f2937; padding:12px; text-align:center; }}
-            nav a {{ color:white; margin:0 15px; text-decoration:none; }}
-            .container {{ width:90%; margin:30px auto; }}
-            .grid {{ display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:25px; }}
-            .card {{ background:white; border-radius:10px; box-shadow:0 6px 15px rgba(0,0,0,0.08); overflow:hidden; }}
-            .card img {{ width:100%; height:220px; object-fit:cover; }}
-            .card-content {{ padding:15px; text-align:center; }}
-            .btn {{ background:#2563eb; color:white; padding:8px 14px; border-radius:6px; text-decoration:none; display:inline-block; margin-top:8px; }}
-            .total {{ margin-top:20px; font-size:22px; font-weight:bold; }}
-            footer {{ background:#111827; color:white; text-align:center; padding:20px; margin-top:40px; }}
+            body {{
+                margin: 0;
+                font-family: 'Segoe UI', sans-serif;
+                background: #f3f4f6;
+            }}
+            header {{
+                background: #111827;
+                color: white;
+                padding: 20px;
+                text-align: center;
+            }}
+            nav {{
+                background: #1f2937;
+                padding: 10px;
+                text-align: center;
+            }}
+            nav a {{
+                color: white;
+                margin: 0 20px;
+                text-decoration: none;
+                font-weight: bold;
+            }}
+            .container {{
+                width: 90%;
+                margin: 30px auto;
+            }}
+            .grid {{
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+                gap: 25px;
+            }}
+            .card {{
+                background: white;
+                border-radius: 12px;
+                box-shadow: 0 6px 15px rgba(0,0,0,0.08);
+                overflow: hidden;
+                transition: transform 0.2s ease;
+            }}
+            .card:hover {{
+                transform: translateY(-5px);
+            }}
+            .card img {{
+                width: 100%;
+                height: 220px;
+                object-fit: cover;
+            }}
+            .card-content {{
+                padding: 15px;
+                text-align: center;
+            }}
+            .price {{
+                font-size: 18px;
+                font-weight: bold;
+                margin: 10px 0;
+            }}
+            .btn {{
+                display: inline-block;
+                padding: 8px 14px;
+                background: #2563eb;
+                color: white;
+                text-decoration: none;
+                border-radius: 6px;
+                margin-top: 8px;
+            }}
+            .btn:hover {{
+                background: #1d4ed8;
+            }}
+            .total {{
+                margin-top: 20px;
+                font-size: 22px;
+                font-weight: bold;
+            }}
+            footer {{
+                text-align: center;
+                padding: 20px;
+                background: #111827;
+                color: white;
+                margin-top: 40px;
+            }}
         </style>
     </head>
     <body>
-        <header><h1>🛒 Modern eCommerce Store</h1></header>
+        <header>
+            <h1>🛒 Modern eCommerce Store</h1>
+        </header>
         <nav>
             <a href="/">Home</a>
             <a href="/cart">Cart</a>
         </nav>
-        <div class="container">{content}</div>
-        <footer>© 2026 DevOps CI/CD Project</footer>
+        <div class="container">
+            {content}
+        </div>
+        <footer>
+            © 2026 DevOps CI/CD Project
+        </footer>
     </body>
     </html>
     """
@@ -120,15 +178,17 @@ def render_page(content):
 @app.route("/")
 def home():
     products = get_products()
-    content = "<h2>Featured Products</h2><div class='grid'>"
+
+    content = "<h2>Featured Products</h2>"
+    content += "<div class='grid'>"
 
     for p in products:
         content += f"""
         <div class="card">
-            <img src="{p['image']}">
+            <img src="{p['image']}?auto=format&fit=crop&w=500&q=80">
             <div class="card-content">
                 <h3>{p['name']}</h3>
-                <p><strong>${p['price']}</strong></p>
+                <div class="price">${p['price']}</div>
                 <a class="btn" href="/add/{p['id']}">Add to Cart</a>
             </div>
         </div>
@@ -142,6 +202,7 @@ def home():
 def add_to_cart(id):
     if "cart" not in session:
         session["cart"] = []
+
     session["cart"].append(id)
     session.modified = True
     return redirect("/cart")
@@ -149,27 +210,29 @@ def add_to_cart(id):
 
 @app.route("/cart")
 def cart():
-    content = "<h2>Your Cart</h2>"
+    content = "<h2>Your Shopping Cart 🛍</h2>"
     total = 0
 
     if "cart" in session and session["cart"]:
         content += "<div class='grid'>"
+
         for item_id in session["cart"]:
             product = get_product(item_id)
             if product:
                 total += product["price"]
                 content += f"""
                 <div class="card">
-                    <img src="{product['image']}">
+                    <img src="{product['image']}?auto=format&fit=crop&w=500&q=80">
                     <div class="card-content">
                         <h3>{product['name']}</h3>
-                        <p>${product['price']}</p>
+                        <div class="price">${product['price']}</div>
                     </div>
                 </div>
                 """
+
         content += "</div>"
         content += f"<div class='total'>Total: ${total}</div>"
-        content += "<a class='btn' href='/checkout'>Checkout</a>"
+        content += "<br><a class='btn' href='/checkout'>Checkout</a>"
     else:
         content += "<p>Your cart is empty.</p>"
 
@@ -179,10 +242,12 @@ def cart():
 @app.route("/checkout")
 def checkout():
     session.pop("cart", None)
-    return render_page("""
+    content = """
         <h2>🎉 Order Confirmed!</h2>
+        <p>Thank you for shopping with us.</p>
         <a class="btn" href="/">Continue Shopping</a>
-    """)
+    """
+    return render_page(content)
 
 
 if __name__ == "__main__":
