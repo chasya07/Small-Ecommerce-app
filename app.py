@@ -27,8 +27,6 @@ def init_db():
             ("T-Shirt", 20, "https://images.unsplash.com/photo-1618354691373-d851c5c3a990"),
             ("Running Shoes", 75, "https://images.unsplash.com/photo-1542291026-7eec264c27ff"),
             ("Luxury Watch", 199, "https://images.unsplash.com/photo-1523275335684-37898b6baf30"),
-            ("Leather Wallet", 45, "https://images.unsplash.com/photo-1585386959984-a41552231658"),
-            ("Wireless Headphones", 120, "https://images.unsplash.com/photo-1518443895914-6b68b4a7f9e1"),
             ("Smartphone", 699, "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9"),
             ("Backpack", 60, "https://images.unsplash.com/photo-1509762774605-f07235a08f1f"),
             ("Sunglasses", 35, "https://images.unsplash.com/photo-1511499767150-a48a237f0083")
