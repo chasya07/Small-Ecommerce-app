@@ -1,12 +1,10 @@
 from flask import Flask, redirect, session
 import sqlite3
-import os
 
 app = Flask(__name__)
 app.secret_key = "supersecretkey"
 
 DB_NAME = "store.db"
-
 
 # ---------------- DATABASE ----------------
 def init_db():
@@ -20,7 +18,6 @@ def init_db():
         )
     """)
 
-    # Insert default products only if table is empty
     count = conn.execute("SELECT COUNT(*) FROM products").fetchone()[0]
 
     if count == 0:
@@ -50,30 +47,107 @@ def get_product(product_id):
     return product
 
 
-# 🔥 IMPORTANT: Initialize DB when app loads (works with Gunicorn)
+# Initialize DB
 init_db()
+
+
+# ---------------- HTML TEMPLATE ----------------
+def render_page(content):
+    return f"""
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <title>Mini eCommerce</title>
+        <style>
+            body {{
+                font-family: Arial, sans-serif;
+                margin: 0;
+                background: #f4f6f9;
+            }}
+            header {{
+                background: #1f2937;
+                color: white;
+                padding: 15px;
+                text-align: center;
+            }}
+            nav {{
+                background: #111827;
+                padding: 10px;
+                text-align: center;
+            }}
+            nav a {{
+                color: white;
+                margin: 0 15px;
+                text-decoration: none;
+                font-weight: bold;
+            }}
+            .container {{
+                width: 80%;
+                margin: 30px auto;
+            }}
+            .product {{
+                background: white;
+                padding: 20px;
+                margin: 15px 0;
+                border-radius: 8px;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            }}
+            .btn {{
+                display: inline-block;
+                padding: 8px 12px;
+                background: #2563eb;
+                color: white;
+                text-decoration: none;
+                border-radius: 5px;
+                margin-top: 10px;
+            }}
+            .btn:hover {{
+                background: #1d4ed8;
+            }}
+            footer {{
+                text-align: center;
+                padding: 20px;
+                background: #1f2937;
+                color: white;
+                margin-top: 40px;
+            }}
+        </style>
+    </head>
+    <body>
+        <header>
+            <h1>🛒 Mini eCommerce Store</h1>
+        </header>
+        <nav>
+            <a href="/">Home</a>
+            <a href="/cart">Cart</a>
+        </nav>
+        <div class="container">
+            {content}
+        </div>
+        <footer>
+            © 2026 Mini eCommerce | DevOps Project
+        </footer>
+    </body>
+    </html>
+    """
 
 
 # ---------------- ROUTES ----------------
 @app.route("/")
 def home():
     products = get_products()
-
-    html = """
-    <h1>Mini eCommerce Store 🛒</h1>
-    <a href='/cart'>View Cart</a>
-    <hr>
-    """
+    content = "<h2>Available Products</h2>"
 
     for p in products:
-        html += f"""
-        <h3>{p['name']}</h3>
-        <p>Price: ${p['price']}</p>
-        <a href='/add/{p['id']}'>Add to Cart</a>
-        <hr>
+        content += f"""
+        <div class="product">
+            <h3>{p['name']}</h3>
+            <p><strong>Price:</strong> ${p['price']}</p>
+            <a class="btn" href="/add/{p['id']}">Add to Cart</a>
+        </div>
         """
 
-    return html
+    return render_page(content)
 
 
 @app.route("/add/<int:id>")
@@ -88,31 +162,38 @@ def add_to_cart(id):
 
 @app.route("/cart")
 def cart():
-    html = "<h1>Your Cart 🛍</h1><a href='/'>Continue Shopping</a><hr>"
+    content = "<h2>Your Cart 🛍</h2>"
     total = 0
 
-    if "cart" in session:
+    if "cart" in session and session["cart"]:
         for item_id in session["cart"]:
             product = get_product(item_id)
             if product:
                 total += product["price"]
-                html += f"<p>{product['name']} - ${product['price']}</p>"
+                content += f"""
+                <div class="product">
+                    <h3>{product['name']}</h3>
+                    <p>Price: ${product['price']}</p>
+                </div>
+                """
+        content += f"<h3>Total: ${total}</h3>"
+        content += '<a class="btn" href="/checkout">Checkout</a>'
+    else:
+        content += "<p>Your cart is empty.</p>"
 
-    html += f"<h3>Total: ${total}</h3>"
-    html += "<br><a href='/checkout'>Checkout</a>"
-
-    return html
+    return render_page(content)
 
 
 @app.route("/checkout")
 def checkout():
     session.pop("cart", None)
-    return """
-    <h1>Order Placed Successfully! 🎉</h1>
-    <a href='/'>Back to Home</a>
+    content = """
+        <h2>🎉 Order Placed Successfully!</h2>
+        <p>Thank you for shopping with us.</p>
+        <a class="btn" href="/">Continue Shopping</a>
     """
+    return render_page(content)
 
 
-# For local development only
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)
