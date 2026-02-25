@@ -7,26 +7,30 @@ app.secret_key = "supersecretkey"
 
 DB_NAME = "store.db"
 
+
 # ---------------- DATABASE ----------------
 def init_db():
     conn = sqlite3.connect(DB_NAME)
+
     conn.execute("""
-    CREATE TABLE IF NOT EXISTS products (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        name TEXT NOT NULL,
-        price REAL NOT NULL
-    )
+        CREATE TABLE IF NOT EXISTS products (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            name TEXT NOT NULL,
+            price REAL NOT NULL
+        )
     """)
-    
-    products = conn.execute("SELECT * FROM products").fetchall()
-    
-    if not products:
+
+    # Insert default products only if table is empty
+    count = conn.execute("SELECT COUNT(*) FROM products").fetchone()[0]
+
+    if count == 0:
         conn.execute("INSERT INTO products (name, price) VALUES ('T-Shirt', 20)")
         conn.execute("INSERT INTO products (name, price) VALUES ('Shoes', 50)")
         conn.execute("INSERT INTO products (name, price) VALUES ('Watch', 100)")
-        conn.commit()
-    
+
+    conn.commit()
     conn.close()
+
 
 def get_products():
     conn = sqlite3.connect(DB_NAME)
@@ -35,12 +39,20 @@ def get_products():
     conn.close()
     return products
 
+
 def get_product(product_id):
     conn = sqlite3.connect(DB_NAME)
     conn.row_factory = sqlite3.Row
-    product = conn.execute("SELECT * FROM products WHERE id=?", (product_id,)).fetchone()
+    product = conn.execute(
+        "SELECT * FROM products WHERE id=?", (product_id,)
+    ).fetchone()
     conn.close()
     return product
+
+
+# 🔥 IMPORTANT: Initialize DB when app loads (works with Gunicorn)
+init_db()
+
 
 # ---------------- ROUTES ----------------
 @app.route("/")
@@ -100,8 +112,7 @@ def checkout():
     <a href='/'>Back to Home</a>
     """
 
-# Initialize database when module loads
-init_db()
 
+# For local development only
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)
