@@ -23,18 +23,18 @@ def init_db():
     count = conn.execute("SELECT COUNT(*) FROM products").fetchone()[0]
 
     if count == 0:
-       products = [
-       ("T-Shirt", 20, "https://via.placeholder.com/500x400.png?text=T-Shirt"),
-       ("Running Shoes", 75, "https://via.placeholder.com/500x400.png?text=Running+Shoes"),
-       ("Luxury Watch", 199, "https://via.placeholder.com/500x400.png?text=Luxury+Watch"),
-       ("Leather Wallet", 45, "https://via.placeholder.com/500x400.png?text=Leather+Wallet"),
-       ("Wireless Headphones", 120, "https://via.placeholder.com/500x400.png?text=Wireless+Headphones"),
-       ("Smartphone", 699, "https://via.placeholder.com/500x400.png?text=Smartphone"),
-       ("Backpack", 60, "https://via.placeholder.com/500x400.png?text=Backpack"),
-       ("Sunglasses", 35, "https://via.placeholder.com/500x400.png?text=Sunglasses"),
-       ("Gaming Mouse", 55, "https://via.placeholder.com/500x400.png?text=Gaming+Mouse"),
-       ("Bluetooth Speaker", 85, "https://via.placeholder.com/500x400.png?text=Bluetooth+Speaker")
-    ]
+        products = [
+            ("T-Shirt", 20, "https://picsum.photos/seed/tshirt/500/400"),
+            ("Running Shoes", 75, "https://picsum.photos/seed/shoes/500/400"),
+            ("Luxury Watch", 199, "https://picsum.photos/seed/watch/500/400"),
+            ("Leather Wallet", 45, "https://picsum.photos/seed/wallet/500/400"),
+            ("Wireless Headphones", 120, "https://picsum.photos/seed/headphones/500/400"),
+            ("Smartphone", 699, "https://picsum.photos/seed/phone/500/400"),
+            ("Backpack", 60, "https://picsum.photos/seed/backpack/500/400"),
+            ("Sunglasses", 35, "https://picsum.photos/seed/sunglasses/500/400"),
+            ("Gaming Mouse", 55, "https://picsum.photos/seed/mouse/500/400"),
+            ("Bluetooth Speaker", 85, "https://picsum.photos/seed/speaker/500/400")
+        ]
 
         conn.executemany(
             "INSERT INTO products (name, price, image) VALUES (?, ?, ?)",
@@ -63,7 +63,7 @@ def get_product(product_id):
     return product
 
 
-# Initialize DB
+# Initialize DB (Important for Gunicorn)
 init_db()
 
 
@@ -181,8 +181,7 @@ def render_page(content):
 def home():
     products = get_products()
 
-    content = "<h2>Featured Products</h2>"
-    content += "<div class='grid'>"
+    content = "<h2>Featured Products</h2><div class='grid'>"
 
     for p in products:
         content += f"""
