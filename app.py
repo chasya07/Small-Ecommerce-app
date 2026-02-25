@@ -24,14 +24,16 @@ def init_db():
 
     if count == 0:
         products = [
-            ("T-Shirt", 20, "https://images.unsplash.com/photo-1618354691373-d851c5c3a990"),
-            ("Running Shoes", 75, "https://images.unsplash.com/photo-1542291026-7eec264c27ff"),
-            ("Luxury Watch", 199, "https://images.unsplash.com/photo-1523275335684-37898b6baf30"),
-            ("Leather Wallet", 45, "https://images.unsplash.com/photo-1585386959984-a41552231658"),
-            ("Wireless Headphones", 120, "https://images.unsplash.com/photo-1518443895914-6b68b4a7f9e1"),
-            ("Smartphone", 699, "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9"),
-            ("Backpack", 60, "https://images.unsplash.com/photo-1509762774605-f07235a08f1f"),
-            ("Sunglasses", 35, "https://images.unsplash.com/photo-1511499767150-a48a237f0083")
+            ("T-Shirt", 20, "https://source.unsplash.com/500x500/?tshirt"),
+            ("Running Shoes", 75, "https://source.unsplash.com/500x500/?running-shoes"),
+            ("Luxury Watch", 199, "https://source.unsplash.com/500x500/?luxury-watch"),
+            ("Leather Wallet", 45, "https://source.unsplash.com/500x500/?leather-wallet"),
+            ("Wireless Headphones", 120, "https://source.unsplash.com/500x500/?wireless-headphones"),
+            ("Smartphone", 699, "https://source.unsplash.com/500x500/?smartphone"),
+            ("Backpack", 60, "https://source.unsplash.com/500x500/?backpack"),
+            ("Sunglasses", 35, "https://source.unsplash.com/500x500/?sunglasses"),
+            ("Gaming Mouse", 55, "https://source.unsplash.com/500x500/?gaming-mouse"),
+            ("Bluetooth Speaker", 85, "https://source.unsplash.com/500x500/?bluetooth-speaker")
         ]
 
         conn.executemany(
@@ -61,17 +63,17 @@ def get_product(product_id):
     return product
 
 
-# Initialize DB (important for Gunicorn)
+# Initialize DB
 init_db()
 
 
-# ---------------- TEMPLATE WRAPPER ----------------
+# ---------------- TEMPLATE ----------------
 def render_page(content):
     return f"""
     <!DOCTYPE html>
     <html>
     <head>
-        <title>Mini eCommerce</title>
+        <title>Modern eCommerce</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <style>
             body {{
@@ -87,7 +89,7 @@ def render_page(content):
             }}
             nav {{
                 background: #1f2937;
-                padding: 10px;
+                padding: 12px;
                 text-align: center;
             }}
             nav a {{
@@ -185,7 +187,7 @@ def home():
     for p in products:
         content += f"""
         <div class="card">
-            <img src="{p['image']}?auto=format&fit=crop&w=500&q=80">
+            <img src="{p['image']}">
             <div class="card-content">
                 <h3>{p['name']}</h3>
                 <div class="price">${p['price']}</div>
@@ -222,7 +224,7 @@ def cart():
                 total += product["price"]
                 content += f"""
                 <div class="card">
-                    <img src="{product['image']}?auto=format&fit=crop&w=500&q=80">
+                    <img src="{product['image']}">
                     <div class="card-content">
                         <h3>{product['name']}</h3>
                         <div class="price">${product['price']}</div>
