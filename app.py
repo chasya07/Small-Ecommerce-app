@@ -6,7 +6,6 @@ app.secret_key = "supersecretkey"
 
 DB_NAME = "store.db"
 
-
 # ---------------- DATABASE ----------------
 def init_db():
     conn = sqlite3.connect(DB_NAME)
@@ -24,16 +23,16 @@ def init_db():
 
     if count == 0:
         products = [
-            ("T-Shirt", 20, "https://picsum.photos/seed/tshirt/500/400"),
-            ("Running Shoes", 75, "https://picsum.photos/seed/shoes/500/400"),
-            ("Luxury Watch", 199, "https://picsum.photos/seed/watch/500/400"),
-            ("Leather Wallet", 45, "https://picsum.photos/seed/wallet/500/400"),
-            ("Wireless Headphones", 120, "https://picsum.photos/seed/headphones/500/400"),
-            ("Smartphone", 699, "https://picsum.photos/seed/phone/500/400"),
-            ("Backpack", 60, "https://picsum.photos/seed/backpack/500/400"),
-            ("Sunglasses", 35, "https://picsum.photos/seed/sunglasses/500/400"),
-            ("Gaming Mouse", 55, "https://picsum.photos/seed/mouse/500/400"),
-            ("Bluetooth Speaker", 85, "https://picsum.photos/seed/speaker/500/400")
+            ("T-Shirt", 20, "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/Plain_Tshirt.jpg/512px-Plain_Tshirt.jpg"),
+            ("Running Shoes", 75, "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8c/Running_shoes.jpg/512px-Running_shoes.jpg"),
+            ("Luxury Watch", 199, "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Luxury_watch.jpg/512px-Luxury_watch.jpg"),
+            ("Leather Wallet", 45, "https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/Leather_wallet.jpg/512px-Leather_wallet.jpg"),
+            ("Wireless Headphones", 120, "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4f/Wireless_headphones.jpg/512px-Wireless_headphones.jpg"),
+            ("Smartphone", 699, "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/IPhone_14_Pro.jpg/512px-IPhone_14_Pro.jpg"),
+            ("Backpack", 60, "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Backpack.jpg/512px-Backpack.jpg"),
+            ("Sunglasses", 35, "https://upload.wikimedia.org/wikipedia/commons/thumb/1/16/Sunglasses.jpg/512px-Sunglasses.jpg"),
+            ("Gaming Mouse", 55, "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Computer_mouse.jpg/512px-Computer_mouse.jpg"),
+            ("Bluetooth Speaker", 85, "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Bluetooth_speaker.jpg/512px-Bluetooth_speaker.jpg")
         ]
 
         conn.executemany(
@@ -63,7 +62,7 @@ def get_product(product_id):
     return product
 
 
-# Initialize DB (Important for Gunicorn)
+# Initialize DB for Gunicorn
 init_db()
 
 
@@ -78,8 +77,8 @@ def render_page(content):
         <style>
             body {{
                 margin: 0;
-                font-family: 'Segoe UI', sans-serif;
-                background: #f3f4f6;
+                font-family: Arial, sans-serif;
+                background: #f4f6f9;
             }}
             header {{
                 background: #111827;
@@ -203,7 +202,6 @@ def home():
 def add_to_cart(id):
     if "cart" not in session:
         session["cart"] = []
-
     session["cart"].append(id)
     session.modified = True
     return redirect("/cart")
