@@ -23,18 +23,18 @@ def init_db():
     count = conn.execute("SELECT COUNT(*) FROM products").fetchone()[0]
 
     if count == 0:
-        products = [
-            ("T-Shirt", 20, "https://source.unsplash.com/500x500/?tshirt"),
-            ("Running Shoes", 75, "https://source.unsplash.com/500x500/?running-shoes"),
-            ("Luxury Watch", 199, "https://source.unsplash.com/500x500/?luxury-watch"),
-            ("Leather Wallet", 45, "https://source.unsplash.com/500x500/?leather-wallet"),
-            ("Wireless Headphones", 120, "https://source.unsplash.com/500x500/?wireless-headphones"),
-            ("Smartphone", 699, "https://source.unsplash.com/500x500/?smartphone"),
-            ("Backpack", 60, "https://source.unsplash.com/500x500/?backpack"),
-            ("Sunglasses", 35, "https://source.unsplash.com/500x500/?sunglasses"),
-            ("Gaming Mouse", 55, "https://source.unsplash.com/500x500/?gaming-mouse"),
-            ("Bluetooth Speaker", 85, "https://source.unsplash.com/500x500/?bluetooth-speaker")
-        ]
+       products = [
+       ("T-Shirt", 20, "https://via.placeholder.com/500x400.png?text=T-Shirt"),
+       ("Running Shoes", 75, "https://via.placeholder.com/500x400.png?text=Running+Shoes"),
+       ("Luxury Watch", 199, "https://via.placeholder.com/500x400.png?text=Luxury+Watch"),
+       ("Leather Wallet", 45, "https://via.placeholder.com/500x400.png?text=Leather+Wallet"),
+       ("Wireless Headphones", 120, "https://via.placeholder.com/500x400.png?text=Wireless+Headphones"),
+       ("Smartphone", 699, "https://via.placeholder.com/500x400.png?text=Smartphone"),
+       ("Backpack", 60, "https://via.placeholder.com/500x400.png?text=Backpack"),
+       ("Sunglasses", 35, "https://via.placeholder.com/500x400.png?text=Sunglasses"),
+       ("Gaming Mouse", 55, "https://via.placeholder.com/500x400.png?text=Gaming+Mouse"),
+       ("Bluetooth Speaker", 85, "https://via.placeholder.com/500x400.png?text=Bluetooth+Speaker")
+    ]
 
         conn.executemany(
             "INSERT INTO products (name, price, image) VALUES (?, ?, ?)",
