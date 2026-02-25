@@ -6,9 +6,4 @@ services:
     container_name: ecommerce-app
     ports:
       - "5000:5000"
-    volumes:
-      - sqlite-data:/app
     restart: always
-
-volumes:
-  sqlite-data:
