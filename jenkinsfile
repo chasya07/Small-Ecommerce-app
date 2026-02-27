@@ -1,0 +1,24 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Code') {
+            steps {
+                git branch: 'ecommerce', url: 'https://github.com/chasya07/projects.git'
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                sh 'docker build -t ecommerce-app:latest .'
+            }
+        }
+
+        stage('Deploy Application') {
+            steps {
+                sh 'docker-compose down || true'
+                sh 'docker compose up -d --build'
+            }
+        }
+    }
+}
