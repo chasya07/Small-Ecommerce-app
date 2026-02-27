@@ -68,7 +68,7 @@ Create inbound rules:
 - HTTP – TCP – Port 80 – 0.0.0.0/0  
 - Custom TCP – Port 5000 (Flask) – 0.0.0.0/0  
 - Custom TCP – Port 8080 (Jenkins) – 0.0.0.0/0  
-![sg Screenshot](Images/Security group.png)
+ ![sg Screenshot](Images/Securitygroup.png)
 ---
 
 ### 3. Connect to EC2 Instance
@@ -165,9 +165,9 @@ http://<PUBLIC_IP>:8080
 sudo usermod -aG docker jenkins
 sudo systemctl restart jenkins
 ```
-![sg Screenshot](Images/Jenkins user.png)
----
+ ![sg Screenshot](Images/Jenkinsuser.png)
 
+---
 # Step 4: GitHub Repository Configuration
 
 Ensure your GitHub repository contains the following three files:
