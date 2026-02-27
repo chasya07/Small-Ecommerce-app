@@ -57,7 +57,7 @@ The deployment is containerized using Docker and Docker Compose. A full CI/CD pi
 - Launch a new instance using the **Amazon Linux 2023 (kernel-6.1)** AMI.
 - Select the `c7i-flex.large` instance type.
 - Create and assign a new key pair for SSH access.
-
+![Instance Screenshot](Images/Instance.png)
 ---
 
 ### 2. Configure Security Group
@@ -68,7 +68,7 @@ Create inbound rules:
 - HTTP – TCP – Port 80 – 0.0.0.0/0  
 - Custom TCP – Port 5000 (Flask) – 0.0.0.0/0  
 - Custom TCP – Port 8080 (Jenkins) – 0.0.0.0/0  
-
+![sg Screenshot](Images/Security group.png)
 ---
 
 ### 3. Connect to EC2 Instance
@@ -165,7 +165,7 @@ http://<PUBLIC_IP>:8080
 sudo usermod -aG docker jenkins
 sudo systemctl restart jenkins
 ```
-
+![sg Screenshot](Images/Jenkins user.png)
 ---
 
 # Step 4: GitHub Repository Configuration
@@ -263,7 +263,7 @@ pipeline {
 - Enter your GitHub repository URL
 - Verify Script Path is `Jenkinsfile`
 - Save configuration
-
+![sg Screenshot](Images/Pipeline.png)
 ---
 
 ## Run the Pipeline
