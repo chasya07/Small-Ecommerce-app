@@ -14,7 +14,9 @@
   - docker-compose.yml  
   - Jenkinsfile  
 - Step 5: Jenkins Pipeline Creation and Execution  
-- Conclusion  
+- Conclusion
+- Infrastructure Diagram
+- Work flow Diagram
 
 ---
 
@@ -293,7 +295,7 @@ docker ps
 
 ---
 
-# Conclusion
+## Conclusion
 
 The CI/CD pipeline is now fully operational.
 
@@ -303,3 +305,13 @@ Any git push to the configured branch of the GitHub repository will automaticall
 - Deploy the updated application  
 
 Ensuring a seamless and automated workflow from development to production.
+
+##  Infrastructure Diagram
+
+ ![Infra Screenshot](Images/Infra.jpg)
+
+ ##  Work flow Diagram
+
+ ![Workflow Screenshot](Images/project_workflow.png)
+
+
